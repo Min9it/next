@@ -1,8 +1,20 @@
 import { Suspense } from "react";
-import MovieInfo from "../../../../components/movie-info";
+import MovieInfo, { getMovie } from "../../../../components/movie-info";
 import MovieVideos from "../../../../components/movie-videos";
 
-export default async ({ params: { id } }: { params: { id: string } }) => {
+interface IParams {
+  params: { id: string };
+}
+
+export const generateMetadata = async ({ params: { id } }: IParams) => {
+  // cache된 fetch 데이터를 가져옴(기존에 호출된 적이 있다면)
+  const movie = await getMovie(id);
+  return {
+    title: movie.title,
+  };
+};
+
+export default async ({ params: { id } }: IParams) => {
   /* 1. 각각 request => 순차적으로 실행 */
   // const movie = await getMovie(id);
   // const videos = await getVideos(id);
